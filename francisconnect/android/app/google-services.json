@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "81163366752",
+    "project_id": "francisconnect",
+    "storage_bucket": "francisconnect.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81163366752:android:a9cbcab0a03a1d929dae05",
+        "android_client_info": {
+          "package_name": "com.example.francisconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0yT6HkcZQg36SXm7sM0Xm7RbB0SLBy_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
