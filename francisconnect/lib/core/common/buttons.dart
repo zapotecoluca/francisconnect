@@ -66,8 +66,8 @@ class SignUpBtn extends StatelessWidget{
 */
 //para ir a registrarse
 
-class goToSignInBtn extends StatelessWidget {
-  const goToSignInBtn({super.key});
+class goToSignUpBtn extends StatelessWidget {
+  const goToSignUpBtn({super.key});
 
   @override
   Widget build(BuildContext context) {

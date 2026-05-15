@@ -1,20 +1,37 @@
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+//import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+//import 'package:francisconnect/core/providers/firebase_providers.dart';
+
+//final authRepositoryProvider = Provider((ref) => AuthRepository(
+  //firestore: ref.read(firestoreProvider), 
+ // auth: ref.read(authProvider)));
 final ValueNotifier<AuthRepository> authRepository = ValueNotifier(AuthRepository());
 
 class AuthRepository {
-  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  //final FirebaseFirestore _firestore;
 
-  User? get currentUser => auth.currentUser;
+  /*AuthRepository({
+    required FirebaseAuth auth,
+    required FirebaseFirestore firestore,
+  }) : _auth = auth
+       _firestore = firestore
+       ;
+*/
 
-  Stream<User?> get authStateChanges => auth.authStateChanges();
+  User? get currentUser => _auth.currentUser;
+
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   Future<UserCredential> signIn({
     required String email,
     required String password,
   }) async {
-    return await auth.signInWithEmailAndPassword(
+    return await _auth.signInWithEmailAndPassword(
       email: email, password: password);
   }
 
@@ -22,18 +39,18 @@ class AuthRepository {
     required String email,
     required String password,
   }) async {
-    await auth.signInWithEmailAndPassword(
+    return await _auth.createUserWithEmailAndPassword(
       email: email, password: password);
   }
 
   Future<void> signtOut() async{
-    await auth.signOut();
+    await _auth.signOut();
   }
 
   Future<void> resetPassword({
     required String email,
   }) async {
-    await auth.sendPasswordResetEmail(email: email);
+    await _auth.sendPasswordResetEmail(email: email);
   }
 
   Future<void> updateUsername({
@@ -50,7 +67,7 @@ class AuthRepository {
       EmailAuthProvider.credential(email: email, password: password);
     await currentUser!.reauthenticateWithCredential(credential);
     await currentUser!.delete();
-    await auth.signOut();
+    await _auth.signOut();
   }
 
   Future<void> resetPasswordFromCurrentPassword({

@@ -19,6 +19,7 @@ class SignupScreenState extends State<SignupScreen> {
   final TextEditingController passwordController = TextEditingController();
   final FirebaseAuth auth = FirebaseAuth.instance;
   final formKey = GlobalKey<FormState>();
+  String errorMessage = '';
  
   @override
    void dispose() {
@@ -32,24 +33,21 @@ class SignupScreenState extends State<SignupScreen> {
     try {
       await authRepository.value.createAccount(email: emailController.text, 
       password: passwordController.text);
-      popIg(context);
-      //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registro exitoso')));
-      
+      popPage(context);
+      goToHome(context);
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context,
-      ).showSnackBar(SnackBar(content: Text(e.message ??'Registro fallido')));
-
+      
       setState(() {
-        
+        errorMessage = e.message ??'Registro fallido';
       });
     } 
   }
 
-  popIg(BuildContext context) {
+  void popPage(BuildContext context) {
     Navigator.pop(context);
   }
 
-  goToHome(BuildContext context) {
+  void goToHome(BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 
@@ -86,9 +84,11 @@ class SignupScreenState extends State<SignupScreen> {
                         border: OutlineInputBorder()
                       ),
                       validator: (String? value) {
-                        if (value == null || value.trim().isEmpty) {
+                        if (value == null ) {
                           return 'No olvides tu correo';
-                        } 
+                        } if ( value.trim().isEmpty) {
+                          return 'No olvides tu correo';
+                        }
                         return null;
                       },
                     ),
@@ -99,10 +99,14 @@ class SignupScreenState extends State<SignupScreen> {
                         labelText: 'Contraseña',
                         border: OutlineInputBorder()
                       ),
+                      obscureText: true,
                       validator: (String? value) {
-                        if (value == null || value.trim().isEmpty) {
+                        if (value == null ) {
+                          return 'No olvides colocar la contraseña';
+                        } if ( value.trim().isEmpty) {
                           return 'No olvides colocar la contraseña';
                         }
+                        return null;
                       },
                     ),
                   ],

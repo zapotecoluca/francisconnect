@@ -3,3 +3,4 @@ class Constants {
   static const whiteLogoPath = 'assets/images/fcLogoWhite.png';
   
 }
+
