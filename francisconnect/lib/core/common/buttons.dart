@@ -12,13 +12,13 @@ class goToLoginBtn extends StatelessWidget {
     return TextButton.icon(
       onPressed: () {
         Navigator.push(context,
-          MaterialPageRoute(builder: (context) => LoginSreen()),
+          MaterialPageRoute(builder: (context) => LoginScreen()),
         );
         
       },
       label: const Text('¿Ya tienes una cuenta?', style: TextStyle(color: Palette.darkGreyColor),),
       icon: Text('Inicia sesión aquí', style: TextStyle(
-        color: Palette.redColor,
+        color: Palette.tertiary,
       ),),
       iconAlignment: IconAlignment.end,
       style: TextButton.styleFrom(
@@ -79,7 +79,7 @@ class goToSignUpBtn extends StatelessWidget {
       },
       label: const Text('¿No tienes una cuenta?', style: TextStyle(color: Palette.darkGreyColor)),
       icon: Text('Crea una aquí', style: TextStyle(
-        color: Palette.redColor,
+        color: Palette.tertiary,
       ),),
       iconAlignment: IconAlignment.end,
       style: TextButton.styleFrom(

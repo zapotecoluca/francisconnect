@@ -1,23 +1,24 @@
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import '../../../core/providers/firebase_providers.dart';
 import '../../../models/user_model.dart';
-import '../repository/auth_repository.dart';
+import 'package:francisconnect/features/auth/repository/auth_repository.dart';
+
+
+
+final userProvider = StateProvider<UserModel?>((ref) => null);
 
 final authControllerProvider = StateNotifierProvider<AuthController, bool>(
   (ref) {return AuthController(
-    authRepository: ref.read(authRepositoryProvider),
+    authRepository: ref.watch(authRepositoryProvider),
     ref: ref,
   );
   });
 
 final authStateChangeProvider = StreamProvider((ref) {
-  final controller = ref.watch(authControllerProvider.notifier);
-  return controller.authStateChange;
+  return ref.read(authProvider).authStateChanges();
 });
 
 final getUserDataProvider =StreamProvider.family((ref, String uid) {

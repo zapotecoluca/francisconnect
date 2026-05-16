@@ -1,150 +1,211 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:francisconnect/core/common/buttons.dart';
-import 'package:francisconnect/core/constants/constants.dart';
-import 'package:francisconnect/features/auth/repository/auth_repository.dart';
-import 'package:francisconnect/features/auth/screens/home_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:francisconnect/features/auth/controller/auth_controller.dart';
 import 'package:francisconnect/theme/palette.dart';
+import 'package:francisconnect/core/constants/constants.dart';
 
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  SignupScreenState createState() => SignupScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
   
 }
 
-class SignupScreenState extends State<SignupScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  final formKey = GlobalKey<FormState>();
-  String errorMessage = '';
+class _SignupScreenState extends ConsumerState<SignupScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  bool _obscurePassword = true;
+  bool _obscureConfirm = true;
  
   @override
    void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
   
-  void signUp() async {
-    try {
-      await authRepository.value.createAccount(email: emailController.text, 
-      password: passwordController.text);
-      popPage(context);
-      goToHome(context);
-    } on FirebaseAuthException catch (e) {
-      
-      setState(() {
-        errorMessage = e.message ??'Registro fallido';
-      });
-    } 
-  }
+  void _signUp() {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final confirm =_confirmPasswordController.text.trim();
 
-  void popPage(BuildContext context) {
-    Navigator.pop(context);
-  }
+    if (email.isEmpty || password.isEmpty || confirm.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Completa todos los campos'))
+      );
+      return;
+    }
 
-  void goToHome(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    if (password != confirm) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('La contraseña no coincide'))
+      );
+      return;
+    }
+
+    if (password.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('La contraseña debe tener al menos 6 caracteres'))
+      );
+      return;
+    }
+
+    ref.read(authControllerProvider.notifier).signUp(
+      email: email,
+      password: password,
+      context: context
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(authControllerProvider);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(Constants.blackLogoPath,
-        height: 70,),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(height: 30),
-            const Text('Regístrate', style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.5,            
-              ), 
-            ),
-            SizedBox(height: 50),
-            Form(
-              key: formKey,
-              child: Center(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'xxxxx@ufg.edu.sv',
-                        border: OutlineInputBorder()
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).padding.top -
+                  MediaQuery.of(context).padding.bottom,
+              ),
+            child: IntrinsicHeight(
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    color: Palette.primary,
+                    padding: const EdgeInsets.symmetric(vertical:48),
+                    child: Column(
+                      children: [
+                        Image.asset(Constants.whiteLogoPath,
+                        height: 70,),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Palette.whiteColor,
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Text(
+                            'Crear cuenta',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 24,),
+                          TextField(
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            autocorrect: false,
+                            decoration: InputDecoration(
+                              labelText: 'Correo institucional',
+                              hintText: 'xxxxx@ufg.edu.sv',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              prefixIcon: const Icon(Icons.email_outlined),
+                            ),
+                          ),
+                          const SizedBox(height: 16,),
+                          TextField(
+                            controller: _passwordController,
+                            obscureText: _obscurePassword,
+                            textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(
+                              labelText: 'Contraseña',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              prefixIcon: const Icon(Icons.lock_outlined),
+                              suffixIcon: IconButton(
+                                icon: Icon(_obscurePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility),
+                                onPressed: () => setState(
+                                    () => _obscurePassword = !_obscurePassword),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16,),
+                          TextField(
+                            controller: _confirmPasswordController,
+                            obscureText: _obscureConfirm,
+                            textInputAction: TextInputAction.done,
+                            onSubmitted: (_) => _signUp(),
+                            decoration: InputDecoration(
+                              labelText: 'Confirmar contraseña',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              prefixIcon: const Icon(Icons.lock_outlined),
+                              suffixIcon: IconButton(
+                                icon: Icon(_obscureConfirm
+                                    ? Icons.visibility_off
+                                    : Icons.visibility),
+                                onPressed: () => setState(
+                                    () => _obscureConfirm = !_obscureConfirm),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 24,),
+
+                          SizedBox(
+                            height: 48,
+                            child: ElevatedButton(
+                              onPressed: isLoading ? null : _signUp,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Palette.tertiary,
+                                foregroundColor: Palette.whiteColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                )
+                              ), 
+                              child: isLoading
+                                ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Palette.whiteColor,
+                                  ),
+                                )
+                                : const Text('Registrarse',
+                                  style: TextStyle(fontSize: 16)
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                goToLoginBtn()
+                              ],
+                            )
+                        ],
                       ),
-                      validator: (String? value) {
-                        if (value == null ) {
-                          return 'No olvides tu correo';
-                        } if ( value.trim().isEmpty) {
-                          return 'No olvides tu correo';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 10,),
-                    TextFormField(
-                      controller: passwordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Contraseña',
-                        border: OutlineInputBorder()
-                      ),
-                      obscureText: true,
-                      validator: (String? value) {
-                        if (value == null ) {
-                          return 'No olvides colocar la contraseña';
-                        } if ( value.trim().isEmpty) {
-                          return 'No olvides colocar la contraseña';
-                        }
-                        return null;
-                      },
-                    ),
-                  ],
-                ),
-              )
-            ),
-            SizedBox(height: 30,),
-            SizedBox(
-              width: 900,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    signUp();
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Palette.redColor,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white
-                      ),
-                    ),
-                    child: const Text('Registrarse', style: TextStyle(color: Palette.whiteColor),),
-                  )
-            ),  
-            SizedBox(height: 20),
-            const goToLoginBtn()
-          ],
+                    ),)
+                ],
+              ),
+            )
+          ),
         ),
       ),
     );
   }
 
-  
 }

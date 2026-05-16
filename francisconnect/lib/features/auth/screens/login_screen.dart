@@ -1,182 +1,169 @@
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:francisconnect/core/common/buttons.dart';
 import 'package:francisconnect/core/constants/constants.dart';
-import 'package:francisconnect/features/auth/repository/auth_repository.dart';
-import 'package:francisconnect/features/auth/screens/forgot_password_screen.dart';
-import 'package:francisconnect/features/auth/screens/home_screen.dart';
 import 'package:francisconnect/theme/palette.dart';
+import 'package:francisconnect/features/auth/controller/auth_controller.dart';
 
-class LoginSreen extends StatefulWidget {
-  const LoginSreen({super.key});
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  LoginSreenState createState() => LoginSreenState();
-  
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class LoginSreenState extends State<LoginSreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  final formKey = GlobalKey<FormState>();
-  String errorMessage = '';
- 
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _obscurePassword = true;
 
   @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
+
+   void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
-  
-  void popPage(BuildContext context) {
-    Navigator.pop(context);
-  }
 
-  void signIn() async {
-    try {
-      await authRepository.value.signIn(email: emailController.text, 
-      password: passwordController.text
+  void _login() {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor completa todos los campos')),
       );
-      
-      popPage(context);
-      goToHome(context);
-
-    } on FirebaseAuthException catch (e) {
-
-      setState(() {
-        errorMessage = e.message ??'Ingreso fallido';
-      }); 
-    } 
+      return;
+    }
+    ref.read(authControllerProvider.notifier).signIn(
+          email: email,
+          password: password,
+          context: context,
+        );
   }
 
-   void goToHome(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-  }
-  
-  
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(authControllerProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(Constants.blackLogoPath,
-        height: 70,),
-        centerTitle: true,
-      ), 
-      body: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(height: 30),
-            const Text('Inicia sesión', style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.5,            
-              ), 
-            ),
-            SizedBox(height: 50),
-            Form(
-              key: formKey,
-              child: Center(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'xxxxx@ufg.edu.sv',
-                        border: OutlineInputBorder()
-                      ),
-                      validator: (String? value) {
-                        if (value == null ) {
-                          return 'No olvides tu correo';
-                        } if ( value.trim().isEmpty) {
-                          return 'No olvides tu correo';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 10,),
-                    TextFormField(
-                      controller: passwordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Contraseña',
-                        border: OutlineInputBorder()
-                      ),
-                      obscureText: true,
-                      validator: (String? value) {
-                        if (value == null ) {
-                          return 'No olvides colocar la contraseña';
-                        } if ( value.trim().isEmpty) {
-                          return 'No olvides colocar la contraseña';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox( height: 10),
-                    Text(
-                      errorMessage, 
-                      style: TextStyle(
-                        color: Palette.redColor,
-                        fontSize: 9),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(onPressed: (){
-                        Navigator.push(context,
-                        MaterialPageRoute(builder: (context) =>
-                          ForgotPasswordScreen()));
-                      }, 
-                      child: Text('¿Olvidaste la contraseña?',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Palette.darkGreyColor
-                      ),)),
-                    )
-                  ],
+      resizeToAvoidBottomInset: true,
+      body:  SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height -
+              MediaQuery.of(context).padding.top -
+              MediaQuery.of(context).padding.bottom,
+          ),
+          child: IntrinsicHeight(
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  color: Palette.primary,
+                  padding: const EdgeInsets.symmetric(vertical:48),
+                  child: Column(
+                    children: [
+                      Image.asset(Constants.whiteLogoPath,
+                      height: 70,),
+                    ],
+                  ),
                 ),
-              )
-            ),
-            SizedBox(height: 30,),
-            SizedBox(
-              width: 900,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    signIn();
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Palette.redColor,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)
+                Expanded(
+                  child: Container(
+                    color: Palette.whiteColor,
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
+                          'Iniciar Sesión',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700
+                          ),
+                        ),
+                        const SizedBox(height: 24,),
+
+                        TextField(
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            autocorrect: false,
+                            decoration: InputDecoration(
+                              labelText: 'Correo institucional',
+                              hintText: 'xxxxx@ufg.edu.sv',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              prefixIcon: const Icon(Icons.email_outlined),
+                            ),
+                          ),
+                        const SizedBox(height: 16),
+
+                        TextField(
+                            controller: _passwordController,
+                            obscureText: _obscurePassword,
+                            textInputAction: TextInputAction.done,
+                            onSubmitted: (_) => _login(),
+                            decoration: InputDecoration(
+                              labelText: 'Contraseña',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              prefixIcon: const Icon(Icons.lock_outlined),
+                              suffixIcon: IconButton(
+                                icon: Icon(_obscurePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility),
+                                onPressed: () => setState(
+                                    () => _obscurePassword = !_obscurePassword),
+                              ),
+                            ),
+                          ),
+                        const SizedBox(height: 24),
+
+                        SizedBox(
+                          height: 48,
+                          child: ElevatedButton(
+                            onPressed: isLoading ? null : _login,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Palette.tertiary,
+                              foregroundColor: Palette.whiteColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)
+                              )
+                            ),
+                          child: isLoading
+                            ?const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Palette.whiteColor,
+                              ),
+                            )
+                            : const Text('Ingresar',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ), 
+                        const SizedBox(height: 16,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            goToSignUpBtn()
+                          ],
+                        )                       
+                      ],
                     ),
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white
-                      ),
-                    ),
-                    child: const Text('Iniciar sesión', style: TextStyle(color: Palette.whiteColor),),
                   )
-            ),  
-            SizedBox(height: 20),
-            const goToSignUpBtn()
-          ],
+                )
+              ],
+            ),
+          ),
         ),
       ),
-      
     );
   }
+}
 
-
-  }
-
-
- 
-
-  
