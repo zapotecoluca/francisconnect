@@ -99,7 +99,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
           usuario: _usuarioController.text,
           facultad: _facultadSeleccionada!,
           carrera: _carreraSeleccionada!,
-          pfp: _pfpFile,
+          pfpFile: _pfpFile,
           context: context,
         );
   }
@@ -116,7 +116,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  // Profile picture picker
+                  
                   GestureDetector(
                     onTap: _pickImage,
                     child: CircleAvatar(
@@ -170,7 +170,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Faculty dropdown
+                  
                   DropdownButtonFormField<String>(
                     decoration:
                         const InputDecoration(labelText: 'Facultad'),
@@ -182,13 +182,12 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     onChanged: (val) {
                       setState(() {
                         _facultadSeleccionada = val;
-                        _carreraSeleccionada = null; // reset undergrad
+                        _carreraSeleccionada = null; 
                       });
                     },
                   ),
                   const SizedBox(height: 12),
 
-                  // Undergrad dropdown — only shows options for selected faculty
                   DropdownButtonFormField<String>(
                     decoration:
                         const InputDecoration(labelText: 'Carrera'),

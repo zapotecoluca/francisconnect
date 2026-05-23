@@ -6,8 +6,6 @@ import '../../../core/providers/firebase_providers.dart';
 import '../../../models/user_model.dart';
 import 'package:francisconnect/features/auth/repository/auth_repository.dart';
 
-
-
 final userProvider = StateProvider<UserModel?>((ref) => null);
 
 final authControllerProvider = StateNotifierProvider<AuthController, bool>(
@@ -86,45 +84,64 @@ class AuthController extends StateNotifier<bool>{
     );
   }
   
-  void saveProfile({
-    required String nombre,
-    required String apellido,
-    required String usuario,
-    required String facultad,
-    required String carrera,
-    File? pfp, 
-    required BuildContext context,
-  }) async {
-    state = true;
-    final uid = _ref.read(authProvider).currentUser!.uid;
+    void saveProfile({
+      required String nombre,
+      required String apellido,
+      required String usuario,
+      required String facultad,
+      required String carrera,
+      File? pfpFile, 
+      required BuildContext context,
+    }) async {
+      state = true;
+      final uid = _ref.read(authProvider).currentUser!.uid;
 
-    String profilePicUrl = '';
-    if (pfp != null) {
-      final ref = _ref
-          .read(storageProvider)
-          .ref()
-          .child('pfps')
-          .child(uid);
-      await ref.putFile(pfp);
-      profilePicUrl = await ref.getDownloadURL();
+      String profilePicUrl = '';
+
+      if (pfpFile != null) {
+        try {
+          final ref = _ref
+            .read(storageProvider)
+            .ref()
+            .child('pfps')
+            .child(uid);
+        await ref.putFile(pfpFile);
+        profilePicUrl = await ref.getDownloadURL();
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text(
+                'No se pudo subir la foto, inténtalo más tarde'
+              ))
+            );
+          }
+          profilePicUrl = '';
+        }
+      }
+
+      final result = await _authRepository.saveUserProfile(
+        uid: uid,
+        nombre: nombre,
+        apellido: apellido,
+        usuario: usuario,
+        facultad: facultad,
+        carrera: carrera,
+        pfpUrl: profilePicUrl,
+      );
+      state = false;
+
+      result.fold(
+        (error) {
+          if (context.mounted) _showSnackbar(context, error);
+        },
+        (_) {
+          if (context.mounted) {
+            Navigator.pushReplacementNamed(context, '/home');
+          }
+        }
+      );
     }
-
-     final result = await _authRepository.saveUserProfile(
-      uid: uid,
-      nombre: nombre,
-      apellido: apellido,
-      usuario: usuario,
-      facultad: facultad,
-      carrera: carrera,
-      pfpUrl: profilePicUrl,
-    );
-    state = false;
-    result.fold(
-      (error) => _showSnackbar(context, error),
-      (_) => Navigator.pushReplacementNamed(context, '/home'),
-    );
-  }
-
+  
   void signOut() async {
     await _authRepository.signOut();
   }

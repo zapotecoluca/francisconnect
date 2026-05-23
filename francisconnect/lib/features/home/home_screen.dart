@@ -1,34 +1,47 @@
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:francisconnect/core/constants/constants.dart';
-import 'package:francisconnect/features/auth/screens/login_screen.dart';
+import 'package:francisconnect/features/auth/controller/auth_controller.dart';
+import 'package:francisconnect/features/home/drawers/forum_list_drawer.dart';
 
-class HomeScreen extends StatelessWidget{
+class HomeScreen extends ConsumerWidget{
   const HomeScreen({super.key});
 
+  void displayDrawer(BuildContext context) {
+    Scaffold.of(context).openDrawer();
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider);
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(Constants.blackLogoPath,
-        height: 60,),
-        centerTitle: true,
+        height: 50,),
+        centerTitle: false,
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              onPressed: (){
+                displayDrawer(context);
+              },
+              icon: Icon(Icons.menu),
+            );
+          }
+        ),
         actions: [
-          IconButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.pushReplacement(context,
-               MaterialPageRoute(builder: (context) => LoginScreen()),
-               );
-            },
-            icon: Icon(Icons.logout),
+          IconButton(onPressed: (){},
+            icon: const Icon(Icons.search)
           ),
+          IconButton (
+            onPressed: (){},
+            icon: CircleAvatar(
+              backgroundImage: AssetImage(Constants.defaultPfp),
+          )
+          )
         ],
       ),
-      body: Center(
-        child: Text('Bienvenido'),
-      ),
+      drawer: ForumListDrawer(),
     );
   } 
 }

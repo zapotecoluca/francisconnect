@@ -13,7 +13,7 @@ class Palette {
   static var accent1 = Color(0xfffc000d);
   static var accent2 = Color(0xff0157bf);
   static var accent3 = Color(0xffbf3e00);
-  static var accent4 = Color(0xffCCFFFFFF);
+  static var accent4 = Color(0xffccffffff);
   static var primaryText = Color(0xff14181B);
   static var secondaryText = Color(0xff57636C);
   static var success = Color(0xff00c086);

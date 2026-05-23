@@ -680,6 +680,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.1"
+  routemaster:
+    dependency: "direct main"
+    description:
+      name: routemaster
+      sha256: e6f2fa1b3f27b0ea1933d3cd4f2f4e783baa07e4d1e6b2c905bc87749878b13c
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   shelf:
     dependency: transitive
     description:
