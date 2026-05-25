@@ -118,9 +118,9 @@ class AuthRepository {
 
   //nombre de usuario disponible
 
-  Future<bool> isUsernameAvailable(String username) async {
+  Future<bool> isUsernameAvailable(String usuario) async {
     final query = await _users
-      .where('username', isEqualTo: username.trim().toLowerCase())
+      .where('usuario', isEqualTo: usuario.trim().toLowerCase())
       .limit(1)
       .get();
     return query.docs.isEmpty;
@@ -146,6 +146,7 @@ class AuthRepository {
       await _users.doc(uid).update({
         'nombre': nombre.trim(),
         'apellido':apellido.trim(),
+        'usuario': usuario,
         'facultad':facultad,
         'carrera': carrera,
         'pfp': pfpUrl,

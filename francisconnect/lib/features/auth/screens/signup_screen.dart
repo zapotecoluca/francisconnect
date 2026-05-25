@@ -68,59 +68,71 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height -
-                  MediaQuery.of(context).padding.top -
-                  MediaQuery.of(context).padding.bottom,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Palette.primary, Palette.secondary]
+          )
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height -
+                    MediaQuery.of(context).padding.top,
               ),
-            child: IntrinsicHeight(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: double.infinity,
-                    color: Palette.primary,
-                    padding: const EdgeInsets.symmetric(vertical:48),
-                    child: Column(
-                      children: [
-                        Image.asset(Constants.whiteLogoPath,
-                        height: 70,),
-                      ],
-                    ),
-                  ),
-                  Expanded(
+                  const SizedBox(height: 48),
+                  Image.asset(Constants.whiteLogoPath, height: 70),
+                  const SizedBox(height: 36),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Container(
-                      color: Palette.whiteColor,
                       padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha:0.15),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           const Text(
                             'Crear cuenta',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 22,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w700
                             ),
                           ),
-                          const SizedBox(height: 24,),
+                          const SizedBox(height: 20),
                           TextField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.next,
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                              labelText: 'Correo institucional',
-                              hintText: 'xxxxx@ufg.edu.sv',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
+                              controller: _emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              autocorrect: false,
+                              decoration: InputDecoration(
+                                labelText: 'Correo institucional',
+                                hintText: '@ufg.edu.sv',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                prefixIcon: const Icon(Icons.email_outlined),
                               ),
-                              prefixIcon: const Icon(Icons.email_outlined),
-                            ),
                           ),
-                          const SizedBox(height: 16,),
+                          const SizedBox(height: 12,),
                           TextField(
                             controller: _passwordController,
                             obscureText: _obscurePassword,
@@ -133,14 +145,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               prefixIcon: const Icon(Icons.lock_outlined),
                               suffixIcon: IconButton(
                                 icon: Icon(_obscurePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility),
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
                                 onPressed: () => setState(
-                                    () => _obscurePassword = !_obscurePassword),
+                                  () => _obscurePassword = !_obscurePassword),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16,),
+                          const SizedBox(height: 12),
                           TextField(
                             controller: _confirmPasswordController,
                             obscureText: _obscureConfirm,
@@ -154,15 +166,15 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               prefixIcon: const Icon(Icons.lock_outlined),
                               suffixIcon: IconButton(
                                 icon: Icon(_obscureConfirm
-                                    ? Icons.visibility_off
-                                    : Icons.visibility),
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
                                 onPressed: () => setState(
-                                    () => _obscureConfirm = !_obscureConfirm),
+                                  () => _obscureConfirm = !_obscureConfirm
+                                ),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 24,),
-
+                          const SizedBox(height: 20),
                           SizedBox(
                             height: 48,
                             child: ElevatedButton(
@@ -175,33 +187,33 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                 )
                               ), 
                               child: isLoading
-                                ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Palette.whiteColor,
-                                  ),
-                                )
-                                : const Text('Registrarse',
-                                  style: TextStyle(fontSize: 16)
+                              ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Palette.whiteColor,
                                 ),
+                              )
+                              : const Text('Registrarse',
+                                style: TextStyle(fontSize: 16)
                               ),
                             ),
-                            const SizedBox(height: 16),
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                goToLoginBtn()
-                              ],
-                            )
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              goToLoginBtn()
+                            ],
+                          )
                         ],
                       ),
-                    ),)
+                    ),
+                  )
                 ],
-              ),
-            )
+              )
+            ),
           ),
         ),
       ),

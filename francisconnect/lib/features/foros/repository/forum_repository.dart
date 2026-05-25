@@ -38,11 +38,48 @@ class ForumRepository {
       return forums;
     });
   }
+  
+ Stream<Forum> getForumById(String id) {
+    return _forums.doc(id).snapshots().map((event) 
+    => Forum.fromMap(event.data() as Map<String, dynamic>));
+  }
 
   Stream<Forum> getForumByName(String nombre) {
     return _forums.doc(nombre).snapshots().map((event) 
     => Forum.fromMap(event.data() as Map<String, dynamic>));
   }
+
+  Stream<List<Forum>> getAllForums() {
+    return _forums.snapshots().map((event)
+    => event.docs.map((doc)
+    => Forum.fromMap(doc.data() as Map<String, dynamic>)).toList());
+  }
+
+  FutureVoid joinForum(String forumId, String uid) async {
+    try {
+      await _forums.doc(forumId).update({
+        'miembros': FieldValue.arrayUnion([uid])
+      });
+      return right(null);
+    } on FirebaseException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  FutureVoid leaveForum(String forumId, String uid) async {
+    try {
+      await _forums.doc(forumId).update({
+          'miembros': FieldValue.arrayRemove([uid]),
+      });
+      return right(null);
+    } on FirebaseException catch (e) {
+      return left(Failure(e.message!));
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+ 
 
   CollectionReference get _forums => _firestore.collection(FirebaseConstants.forumsCollection);
 }

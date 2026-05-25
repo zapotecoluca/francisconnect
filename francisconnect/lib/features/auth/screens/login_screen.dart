@@ -44,47 +44,59 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(authControllerProvider);
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body:  SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height -
-              MediaQuery.of(context).padding.top -
-              MediaQuery.of(context).padding.bottom,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Palette.primary, Palette.secondary]
           ),
-          child: IntrinsicHeight(
-            child: Column(
-              children: [
-                Container(
-                  width: double.infinity,
-                  color: Palette.primary,
-                  padding: const EdgeInsets.symmetric(vertical:48),
-                  child: Column(
-                    children: [
-                      Image.asset(Constants.whiteLogoPath,
-                      height: 70,),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    color: Palette.whiteColor,
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const Text(
-                          'Iniciar Sesión',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).padding.top,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox( height: 60),
+                  Image.asset(Constants.whiteLogoPath, height: 70),
+                  const SizedBox(height: 48),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Palette.whiteColor,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Palette.blackColor.withValues(alpha: 0.15),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4)
                           ),
-                        ),
-                        const SizedBox(height: 24,),
-
-                        TextField(
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Text(
+                            'Inicia Sesión',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          TextField(
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
@@ -97,10 +109,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                               prefixIcon: const Icon(Icons.email_outlined),
                             ),
+                            
                           ),
-                        const SizedBox(height: 16),
-
-                        TextField(
+                          const SizedBox(height: 12),
+                          TextField(
                             controller: _passwordController,
                             obscureText: _obscurePassword,
                             textInputAction: TextInputAction.done,
@@ -109,56 +121,57 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               labelText: 'Contraseña',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                              ),
+                                ),
                               prefixIcon: const Icon(Icons.lock_outlined),
                               suffixIcon: IconButton(
                                 icon: Icon(_obscurePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility),
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
                                 onPressed: () => setState(
-                                    () => _obscurePassword = !_obscurePassword),
+                                  () => _obscurePassword = !_obscurePassword
+                                ),
+                              ),
                               ),
                             ),
-                          ),
-                        const SizedBox(height: 24),
-
-                        SizedBox(
-                          height: 48,
-                          child: ElevatedButton(
-                            onPressed: isLoading ? null : _login,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Palette.tertiary,
-                              foregroundColor: Palette.whiteColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)
+                            const SizedBox(height: 20),
+                            SizedBox(
+                            height: 48,
+                            child: ElevatedButton(
+                              onPressed: isLoading ? null : _login,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Palette.tertiary,
+                                foregroundColor: Palette.whiteColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)
+                                )
+                              ),
+                            child: isLoading
+                              ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Palette.whiteColor,
+                                ),
                               )
-                            ),
-                          child: isLoading
-                            ?const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Palette.whiteColor,
+                              : const Text('Ingresar',
+                                style: TextStyle(fontSize: 16),
                               ),
-                            )
-                            : const Text('Ingresar',
-                              style: TextStyle(fontSize: 16),
                             ),
-                          ),
-                        ), 
-                        const SizedBox(height: 16,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            goToSignUpBtn()
-                          ],
-                        )                       
-                      ],
+                          ), 
+                          const SizedBox(height: 16,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              goToSignUpBtn()
+                            ],
+                          )
+                        ], 
+                      ),
                     ),
                   )
-                )
-              ],
+                ],
+              ),
             ),
           ),
         ),

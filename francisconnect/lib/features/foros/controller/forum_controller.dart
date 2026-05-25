@@ -13,6 +13,14 @@ final userForumsProvider = StreamProvider((ref) {
   return forumController.getUserForums();
 });
 
+final notInForumsProvider = StreamProvider((ref) {
+  return ref.watch(forumControllerProvider.notifier).getUnsubscribedForums();
+});
+
+final getForumByIdProvider = StreamProvider.family((ref, String id) {
+  return ref.watch(forumControllerProvider.notifier).getForumById(id);
+});
+
 final forumControllerProvider = StateNotifierProvider<ForumController, bool>((ref) {
   final forumRepository = ref.watch(forumRepositoryProvider);
   return ForumController(forumRepository: forumRepository, ref: ref);
@@ -57,7 +65,35 @@ class ForumController extends StateNotifier<bool> {
     return _forumRepository.getUserForums(uid);
   }
 
+  Stream<List<Forum>> getUnsubscribedForums() {
+    final uid = _ref.read(userProvider)!.uid;
+    return _forumRepository
+          .getAllForums()
+          .map((forums) => forums.where((f) => !f.miembros.contains(uid)).toList());
+  }
+
   Stream<Forum> getForumByName(String nombre) {
     return _forumRepository.getForumByName(nombre);
+  }
+
+  Stream<Forum> getForumById(String id) {
+    return _forumRepository.getForumById(id);
+  }
+
+  void joinForum(String forumId, BuildContext context) async {
+    final uid = _ref.read(userProvider)?.uid ?? '';
+    final res = await _forumRepository.joinForum(forumId, uid);
+    res.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) => showSnackBar(context, 'Ahora eres miembro de este foro')
+    );
+  }
+
+  void leaveForum(String forumId, BuildContext context) async {
+    final uid = _ref.read(userProvider)?.uid ?? '';
+    final res = await _forumRepository.leaveForum(forumId, uid);
+    res.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) => showSnackBar(context, 'Ya no eres miembro de este foro'));
   }
 }

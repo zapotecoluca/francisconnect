@@ -6,9 +6,9 @@ class Palette {
   static const darkGreyColor = Color.fromRGBO(26, 39, 45, 1); // secondary color
   static const drawerColor = Color.fromRGBO(18, 18, 18, 1);
   static const whiteColor = Colors.white;
-  static var primary = Color(0xffff6f00);
-  static var secondary = Color(0xffff9a00);
-  static var tertiary = Color(0xFFF10034);
+  static const primary = Color(0xffff6f00);
+  static const secondary = Color(0xffff9a00);
+  static const tertiary = Color(0xFFF10034);
   static var lightGreyColor = Color(0xFFF1F4F8);
   static var accent1 = Color(0xfffc000d);
   static var accent2 = Color(0xff0157bf);
@@ -18,7 +18,7 @@ class Palette {
   static var secondaryText = Color(0xff57636C);
   static var success = Color(0xff00c086);
   static var error = Color(0xffff5963);
-  static var warning = Color(0xffffa700);
+  static var accent5 = Color(0xffffa700);
   
 
   // Themes
