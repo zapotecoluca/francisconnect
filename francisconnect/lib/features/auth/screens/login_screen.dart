@@ -105,7 +105,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               labelText: 'Correo institucional',
                               hintText: 'xxxxx@ufg.edu.sv',
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(1),
                               ),
                               prefixIcon: const Icon(Icons.email_outlined),
                             ),
@@ -120,7 +120,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             decoration: InputDecoration(
                               labelText: 'Contraseña',
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(1),
                                 ),
                               prefixIcon: const Icon(Icons.lock_outlined),
                               suffixIcon: IconButton(

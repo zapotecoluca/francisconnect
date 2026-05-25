@@ -46,7 +46,8 @@ class ForumController extends StateNotifier<bool> {
     final uid = _ref.read(userProvider)?.uid ?? '';
     Forum forum = Forum(
       id: nombre, 
-      nombre: nombre, 
+      nombre: nombre,
+      admin: nombre, 
       banner: Constants.defaultBanner, 
       descripcion: descripcion,
       miembros: [uid]

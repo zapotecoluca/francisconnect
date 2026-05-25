@@ -3,12 +3,14 @@ import 'package:flutter/foundation.dart';
 class Forum {
   final String id;
   final String nombre;
+  final String admin;
   final String banner;
   final String descripcion;
   final List<String> miembros;
   Forum({
     required this.id,
     required this.nombre,
+    required this.admin,
     required this.banner,
     required this.descripcion,
     required this.miembros,
@@ -17,13 +19,15 @@ class Forum {
   Forum copyWith({
     String? id,
     String? nombre,
+    String? admin,
     String? banner,
     String? descripcion,
     List<String>? miembros,
   }) {
     return Forum(
       id: id ?? this.id,
-      nombre: nombre ?? this.nombre, 
+      nombre: nombre ?? this.nombre,
+      admin: admin ?? this.admin, 
       banner: banner ?? this.banner, 
       descripcion: descripcion ?? this.descripcion, 
       miembros: miembros ?? this.miembros,
@@ -34,6 +38,7 @@ class Forum {
     return {
       'id': id,
       'nombre': nombre,
+      'admin': admin,
       'banner': banner,
       'descripcion': descripcion,
       'miembros': miembros,
@@ -44,6 +49,7 @@ class Forum {
     return Forum(
       id: map['id'] ?? '', 
       nombre: map['nombre'] ?? '', 
+      admin: map['admin'] ?? '',
       banner: map['banner'] ?? '', 
       descripcion: map['descripcion'] ?? '', 
       miembros: List<String>.from(map['miembros']),
@@ -52,7 +58,7 @@ class Forum {
 
   @override
   String toString() {
-    return 'Forum(id: $id, nombre: $nombre, banner: $banner, descripcion: $descripcion, miembros: $miembros)';
+    return 'Forum(id: $id, nombre: $nombre, asdmin: $admin, banner: $banner, descripcion: $descripcion, miembros: $miembros)';
   }
 
   @override
@@ -62,6 +68,7 @@ class Forum {
     return other is Forum &&
       other.id == id &&
       other.nombre == nombre &&
+      other.admin == admin &&
       other.banner == banner &&
       other.descripcion == descripcion &&
       listEquals(other.miembros, miembros);
@@ -69,7 +76,7 @@ class Forum {
 
   @override
   int get hashCode {
-    return id.hashCode ^ nombre.hashCode ^banner.hashCode ^ descripcion.hashCode ^ miembros.hashCode;
+    return id.hashCode ^ nombre.hashCode ^admin.hashCode ^banner.hashCode ^ descripcion.hashCode ^ miembros.hashCode;
   }
 
 }

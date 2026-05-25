@@ -5,7 +5,7 @@ import 'package:francisconnect/core/constants/constants.dart';
 import 'package:francisconnect/features/auth/controller/auth_controller.dart';
 import 'package:francisconnect/features/home/chat_screen.dart';
 import 'package:francisconnect/features/home/feed.dart';
-import 'package:francisconnect/features/home/forum_menu.dart';
+import 'package:francisconnect/features/foros/screens/forum_menu.dart';
 import 'package:francisconnect/theme/palette.dart';
 import 'package:routemaster/routemaster.dart';
 

@@ -64,13 +64,15 @@ class ForumScreen extends ConsumerWidget {
                       )
                     ),
                     const SizedBox(height: 12),
-
+                    
                     SizedBox(
                       width: double.infinity,
                       height: 42,
                       child: ElevatedButton(
                         onPressed: () {
-                          if (isMember) {
+                          if (forum.admin.contains(currentUid)) {
+                            
+                          } else if (isMember) {
                             ref.read(forumControllerProvider.notifier).leaveForum(forum.id, context);
                           } else {
                             ref.read(forumControllerProvider.notifier).joinForum(forum.id, context);
