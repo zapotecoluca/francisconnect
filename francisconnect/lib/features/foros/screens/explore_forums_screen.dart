@@ -4,6 +4,7 @@ import 'package:francisconnect/core/common/error_text.dart';
 import 'package:francisconnect/core/common/loader.dart';
 import 'package:francisconnect/core/constants/constants.dart';
 import 'package:francisconnect/features/foros/controller/forum_controller.dart';
+import 'package:francisconnect/features/foros/delegate/search_forum_delegate.dart';
 import 'package:francisconnect/models/forum_model.dart';
 import 'package:francisconnect/theme/palette.dart';
 import 'package:routemaster/routemaster.dart';
@@ -23,6 +24,17 @@ class ExploreForumsScreen extends ConsumerWidget {
         ),
         title: Image.asset(Constants.blackLogoPath, height: 50),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showSearch(
+                context: context, 
+                delegate: SearchForumDelegate(ref)
+              );
+            }, 
+            icon: const Icon(Icons.search)
+          ),
+        ],
         backgroundColor: Colors.white,
         elevation: 1,
       ),
@@ -50,7 +62,7 @@ class _ForumBannerCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () => Routemaster.of(context).push('/fc-${forum.id}'),
+      onTap: () => Routemaster.of(context).push('/fc/${forum.id}'),
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         height: 100,

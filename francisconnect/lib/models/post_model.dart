@@ -8,7 +8,8 @@ class Post {
   final String forumName;
   final List<String> likes;
   final int commentCount;
-  final String usuario;
+  final String pfp;
+  final String nombreCompleto;
   final String carrera;
   final String uid;
   final String type;
@@ -21,7 +22,8 @@ class Post {
     required this.forumName,
     required this.likes,
     required this.commentCount,
-    required this.usuario,
+    required this.pfp,
+    required this.nombreCompleto,
     required this.carrera,
     required this.uid,
     required this.type,
@@ -36,7 +38,8 @@ class Post {
     String? forumName,
     List<String>? likes,
     int? commentCount,
-    String? usuario,
+    String? pfp,
+    String? nombreCompleto,
     String? carrera,
     String? uid,
     String? type,
@@ -47,8 +50,9 @@ class Post {
       titulo: titulo ?? this.titulo,
       forumName: forumName ?? this.forumName,
       likes: likes ?? this.likes,
-      commentCount: commentCount ?? this.commentCount, 
-      usuario: usuario ?? this.usuario,
+      commentCount: commentCount ?? this.commentCount,
+      pfp: pfp ?? this.pfp,
+      nombreCompleto: nombreCompleto ?? this.nombreCompleto,
       carrera: carrera ?? this.carrera,
       uid: uid ?? this.uid,
       type: type ?? this.type,
@@ -65,7 +69,8 @@ class Post {
       'forumName': forumName,
       'likes': likes,
       'commentCount': commentCount,
-      'usuario': usuario,
+      'pfp': pfp,
+      'nombreCompleto': nombreCompleto,
       'carrera': carrera,
       'uid': uid,
       'type': type,
@@ -81,18 +86,19 @@ class Post {
       descripcion: map['descripcion'] ?? '',
       forumName: map['forumName'] ?? '', 
       likes: map['likes'] ?? '', 
-      commentCount: map['commentCount'] ?? '', 
-      usuario: map['usuario'] ?? '', 
+      commentCount: map['commentCount'] ?? 0,
+      pfp: map['pfp'] ?? '',
+      nombreCompleto: map['nombreCompleto'] ?? '', 
       carrera: map['carrera'] ?? '',
       uid: map['uid'] ?? '', 
       type: map['type'] ?? '', 
-      creadoEn: map['creadoEn'] ?? ''
+      creadoEn: DateTime.fromMicrosecondsSinceEpoch(map['creadoEn'] ?? '')
     );
   }
 
   @override
   String toString() {
-    return 'Post(id: $id, titulo: $titulo, link: $link, descripcion: $descripcion, forumName: $forumName, likes: $likes, commentCount: $commentCount, usuario: $usuario, carrera: $carrera, uid: $uid, type: $type, creadoEn: $creadoEn)';
+    return 'Post(id: $id, titulo: $titulo, link: $link, descripcion: $descripcion, forumName: $forumName, likes: $likes, commentCount: $commentCount, pfp: $pfp, nombreCompleto: $nombreCompleto, carrera: $carrera, uid: $uid, type: $type, creadoEn: $creadoEn)';
   }
 
   @override
@@ -107,7 +113,8 @@ class Post {
     other.forumName == forumName &&
     listEquals(other.likes, likes) &&
     other.commentCount == commentCount &&
-    other.usuario == usuario &&
+    other.pfp == pfp &&
+    other.nombreCompleto == nombreCompleto &&
     other.carrera == carrera &&
     other.uid == uid &&
     other.type == type &&
@@ -124,7 +131,8 @@ class Post {
       forumName.hashCode ^
       likes.hashCode ^
       commentCount.hashCode ^
-      usuario.hashCode ^
+      pfp.hashCode ^
+      nombreCompleto.hashCode ^
       carrera.hashCode ^
       uid.hashCode ^
       type.hashCode ^

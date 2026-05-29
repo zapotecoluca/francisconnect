@@ -26,6 +26,7 @@ class ForumScreen extends ConsumerWidget {
         ),
         title: Image.asset(Constants.blackLogoPath, height: 50),
         centerTitle: true,
+        backgroundColor: Palette.whiteColor,
         elevation: 1,
       ),
       body: forumAsync.when(
@@ -35,8 +36,15 @@ class ForumScreen extends ConsumerWidget {
           return Column(
             children: [
               Container(
-                width: double.infinity,
-                color: Palette.accent2,
+                width: 300,
+                alignment: AlignmentDirectional.centerStart,
+                decoration: BoxDecoration(
+                  color: Palette.blu,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(30),
+                    bottomRight: Radius.circular(30)
+                  )
+                ),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 16

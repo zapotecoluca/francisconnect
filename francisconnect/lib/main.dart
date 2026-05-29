@@ -3,12 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:francisconnect/core/common/error_text.dart';
+import 'package:francisconnect/core/constants/constants.dart';
 import 'package:francisconnect/features/auth/controller/auth_controller.dart';
 import 'package:francisconnect/models/user_model.dart';
 import 'package:francisconnect/router.dart';
 import 'package:francisconnect/theme/palette.dart';
 import 'firebase_options.dart'; 
-import 'core/common/loader.dart';
 import 'package:routemaster/routemaster.dart';
 
 void main() async {
@@ -54,7 +54,18 @@ class _MyAppState extends ConsumerState<MyApp> {
         routeInformationParser: const RoutemasterParser(),
       ), 
       error: (error, StackTrace) => ErrorText(error: error.toString()), 
-      loading: () => Loader()
+      loading: () => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          backgroundColor: Palette.primary,
+          body: Center(
+            child: Image.asset(
+              Constants.whiteLogoPath,
+              height: 120,
+            ),
+          ),
+        )
+      )
     );
   }
 }

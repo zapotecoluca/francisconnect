@@ -3,14 +3,16 @@ class Comment {
   final String text;
   final DateTime creadoEn;
   final String postId;
-  final String usuario;
+  final String nombreCompleto;
+  final String carrera;
   final String pfp;
   Comment({
     required this.id,
     required this.text,
     required this.creadoEn,
     required this.postId,
-    required this.usuario,
+    required this.nombreCompleto,
+    required this.carrera,
     required this.pfp,
   });
 
@@ -19,7 +21,8 @@ class Comment {
     String? text,
     DateTime? creadoEn,
     String? postId,
-    String? usuario,
+    String? nombreCompleto,
+    String? carrera,
     String? pfp
   }) {
     return Comment(
@@ -27,7 +30,8 @@ class Comment {
       text: text ?? this.text, 
       creadoEn: creadoEn ?? this.creadoEn, 
       postId: postId ?? this.postId, 
-      usuario: usuario ?? this.usuario, 
+      nombreCompleto: nombreCompleto ?? this.nombreCompleto, 
+      carrera: carrera ?? this.carrera,
       pfp: pfp ?? this.pfp
     );
   }
@@ -38,7 +42,8 @@ class Comment {
       'text': text, 
       'creadoEn': creadoEn, 
       'postId': postId, 
-      'usuario': usuario, 
+      'nombreCompleto': nombreCompleto, 
+      'carrera': carrera,
       'pfp': pfp
     };
   }
@@ -49,14 +54,15 @@ class Comment {
       text: map['text'] ?? '',
       creadoEn: map['creadoEn'] ?? '',
       postId: map['postId'] ?? '',
-      usuario: map['usuario'] ?? '', 
+      nombreCompleto: map['nombreCompleto'] ?? '',
+      carrera: map['carrera'] ?? '',
       pfp: map['pfp'] ?? ''
     );
   }
 
   @override
   String toString() {
-    return 'Comment(id: $id, text: $text, creadoEn: $creadoEn, postId: $postId, usuario: $usuario, pfp: $pfp)';
+    return 'Comment(id: $id, text: $text, creadoEn: $creadoEn, postId: $postId, nombreCompleto: $nombreCompleto, carrera: $carrera, pfp: $pfp)';
   }
 
   @override
@@ -68,7 +74,8 @@ class Comment {
       other.text == text &&
       other.creadoEn == creadoEn &&
       other.postId == postId &&
-      other.usuario == usuario &&
+      other.nombreCompleto == nombreCompleto &&
+      other.carrera == carrera &&
       other.pfp == pfp;
   }
 
@@ -79,7 +86,8 @@ class Comment {
       text.hashCode ^
       creadoEn.hashCode ^
       postId.hashCode ^
-      usuario.hashCode ^
+      nombreCompleto.hashCode ^
+      carrera.hashCode ^
       pfp.hashCode;
   }
 }

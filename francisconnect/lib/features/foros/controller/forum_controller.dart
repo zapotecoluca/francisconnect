@@ -30,6 +30,10 @@ final getForumByNameProvider = StreamProvider.family((ref, String nombre) {
   return ref.watch(forumControllerProvider.notifier).getForumByName(nombre);
 });
 
+final searchForumProvider = StreamProvider.family((ref, String query) {
+  return ref.watch(forumControllerProvider.notifier).searchForum(query);
+});
+
 class ForumController extends StateNotifier<bool> {  
 
   final ForumRepository _forumRepository;
@@ -81,6 +85,10 @@ class ForumController extends StateNotifier<bool> {
     return _forumRepository.getForumById(id);
   }
 
+  Stream<List<Forum>> searchForum(String query) {
+    return _forumRepository.searchForum(query);
+  }
+
   void joinForum(String forumId, BuildContext context) async {
     final uid = _ref.read(userProvider)?.uid ?? '';
     final res = await _forumRepository.joinForum(forumId, uid);
@@ -97,4 +105,5 @@ class ForumController extends StateNotifier<bool> {
       (l) => showSnackBar(context, l.message),
       (r) => showSnackBar(context, 'Ya no eres miembro de este foro'));
   }
+
 }

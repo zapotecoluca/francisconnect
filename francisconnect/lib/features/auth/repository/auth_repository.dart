@@ -52,7 +52,6 @@ class AuthRepository {
         'email': email.trim().toLowerCase(),
         'nombre': '',
         'apellido': '',
-        'usuario': '',
         'facultad': '',
         'carrera': '',
         'pfp': '',
@@ -116,15 +115,7 @@ class AuthRepository {
       );
   }
 
-  //nombre de usuario disponible
-
-  Future<bool> isUsernameAvailable(String usuario) async {
-    final query = await _users
-      .where('usuario', isEqualTo: usuario.trim().toLowerCase())
-      .limit(1)
-      .get();
-    return query.docs.isEmpty;
-  }
+ 
 
   //guardar perfil
 
@@ -132,21 +123,15 @@ class AuthRepository {
     required String uid,
     required String nombre,
     required String apellido,
-    required String usuario,
     required String facultad,
     required String carrera,
     required String pfpUrl,
   }) async {
     try {
-      final available = await isUsernameAvailable(usuario);
-      if (!available) {
-        return left('Nombre de usuario no disponible');
-      }
 
       await _users.doc(uid).update({
         'nombre': nombre.trim(),
         'apellido':apellido.trim(),
-        'usuario': usuario,
         'facultad':facultad,
         'carrera': carrera,
         'pfp': pfpUrl,

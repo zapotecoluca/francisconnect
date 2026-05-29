@@ -87,7 +87,6 @@ class AuthController extends StateNotifier<bool>{
     void saveProfile({
       required String nombre,
       required String apellido,
-      required String usuario,
       required String facultad,
       required String carrera,
       File? pfpFile, 
@@ -123,7 +122,6 @@ class AuthController extends StateNotifier<bool>{
         uid: uid,
         nombre: nombre,
         apellido: apellido,
-        usuario: usuario,
         facultad: facultad,
         carrera: carrera,
         pfpUrl: profilePicUrl,

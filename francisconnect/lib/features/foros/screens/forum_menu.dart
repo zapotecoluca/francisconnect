@@ -42,7 +42,7 @@ class ForumMenu extends ConsumerWidget {
           ] else ...[
             ...forums.map((forum) => _ForumBannerCard (
               forum: forum,
-              onTap: () => Routemaster.of(context).push('/fc-${forum.id}')
+              onTap: () => Routemaster.of(context).push('/fc/${forum.id}')
             ))
           ],
           const SizedBox(height: 16),

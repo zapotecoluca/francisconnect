@@ -79,7 +79,28 @@ class ForumRepository {
     }
   }
 
- 
+  Stream<List<Forum>> searchForum(String query) {
+    return _forums
+    .where(
+      'name', 
+      isGreaterThanOrEqualTo: query.isEmpty ? 0 : query, 
+      isLessThan: query.isEmpty 
+        ? null 
+        : query.substring(0, query.length-1) + 
+          String.fromCharCode(
+            query.codeUnitAt(query.length-1) + 1
+            )
+          )
+          .snapshots()
+          .map((event) {
+            List<Forum> forums = [];
+            for(var forum in event.docs) {
+              forums.add(Forum.fromMap(forum.data() as Map<String, dynamic>));
+            }
+            return forums;
+          }
+    );
+  }
 
   CollectionReference get _forums => _firestore.collection(FirebaseConstants.forumsCollection);
 }

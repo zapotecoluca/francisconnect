@@ -1,7 +1,7 @@
 class Constants {
   static const blackLogoPath = 'assets/images/fcLogoBlack.png';
   static const whiteLogoPath = 'assets/images/fcLogoWhite.png';
-  static const defaultBanner = 'assets/images/defaultBAnner.jpg';
+  static const defaultBanner = 'assets/images/defaultBanner.jpg';
   static const defaultPfp = 'assets/images/defaultPfp.png';
 
     static const avatarDefault =
