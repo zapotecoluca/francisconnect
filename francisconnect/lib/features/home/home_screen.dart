@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:francisconnect/core/constants/constants.dart';
 import 'package:francisconnect/features/auth/controller/auth_controller.dart';
-import 'package:francisconnect/features/home/chat_screen.dart';
+import 'package:francisconnect/features/chat/screens/chat_screen.dart';
 import 'package:francisconnect/features/home/feed.dart';
 import 'package:francisconnect/features/foros/screens/forum_menu.dart';
 import 'package:francisconnect/theme/palette.dart';

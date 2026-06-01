@@ -94,7 +94,6 @@ class FeedScreen extends ConsumerWidget {
             error: (_, __) => const SizedBox(),
           ),
 
-        // ── Posts feed ───────────────────────────────────────────────
         if (query.isEmpty)
           const Expanded(
             child: Center(child: Text('Feed próximamente')),
