@@ -20,9 +20,16 @@ const Map<String, List<String>> carrerasDeFacultad = {
   ],
   'Facultad de Ingeniería y Sistemas': [
     'Sistemas y Ciberseguridad',
-    'Industrial',
-    'Ciencias de la computación'
+    'Ingeniería Industrial',
+    'Ciencias de la computación',
+    'Diseño y desarrollo de software'
   ],
+  'Facultad de Ciencias Económicas': [
+    'Administración de empresas',
+    'Comercio y negocios internacionales',
+    'Comunicación corporativa',
+    'Contaduría pública'
+  ]
 };
 
 class CreateProfileScreen extends ConsumerStatefulWidget {
@@ -168,3 +175,4 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
     );
   }
 }
+

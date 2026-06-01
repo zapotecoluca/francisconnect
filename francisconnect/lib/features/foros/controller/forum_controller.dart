@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:francisconnect/core/constants/utils.dart';
+import 'package:francisconnect/core/providers/firebase_providers.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:francisconnect/core/constants/constants.dart';
 import 'package:francisconnect/features/auth/controller/auth_controller.dart';
@@ -45,14 +48,23 @@ class ForumController extends StateNotifier<bool> {
       _ref = ref, 
       super(false);
   
-  void createForum(String nombre, String descripcion, BuildContext context) async{
+  void createForum(String nombre, String descripcion, File? bannerFile, BuildContext context) async{
     state = true;
     final uid = _ref.read(userProvider)?.uid ?? '';
-    Forum forum = Forum(
+
+    String bannerUrl = Constants.defaultBanner;
+    if (bannerFile != null) {
+      try {
+        final storageRef = _ref.read(storageProvider).ref().child('forumBanners').child(nombre);
+        await storageRef.putFile(bannerFile);
+        bannerUrl = await storageRef.getDownloadURL();
+      } catch (_) {}
+    }
+    final forum = Forum(
       id: nombre, 
       nombre: nombre,
       admin: nombre, 
-      banner: Constants.defaultBanner, 
+      banner: bannerUrl, 
       descripcion: descripcion,
       miembros: [uid]
     );

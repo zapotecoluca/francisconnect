@@ -143,4 +143,14 @@ class AuthRepository {
       return left('Error al guardar el perfil');
     }
   }
+
+  //agregar connexión
+
+  Future<void> addConnection(String myUid, String otherUid) async {
+  final id = [myUid, otherUid]..sort();
+  await _firestore.collection('connections').doc('${id[0]}_${id[1]}').set({
+    'uids': [myUid, otherUid],
+    'creadoEn': DateTime.now().millisecondsSinceEpoch,
+  }, SetOptions(merge: true));
+}
 }

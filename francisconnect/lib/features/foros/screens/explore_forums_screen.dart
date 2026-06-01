@@ -62,7 +62,7 @@ class _ForumBannerCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () => Routemaster.of(context).push('/fc/${forum.id}'),
+      onTap: () => Routemaster.of(context).push('/explore-forums/fc/${forum.id}'),
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         height: 100,

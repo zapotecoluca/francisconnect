@@ -72,7 +72,7 @@ class ForumMenu extends ConsumerWidget {
             child: ElevatedButton(
               onPressed: () => Routemaster.of(context).push('/create-forum'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Palette.accent2,
+                backgroundColor: Palette.blu,
                 foregroundColor: Palette.whiteColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)

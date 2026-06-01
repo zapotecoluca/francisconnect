@@ -35,25 +35,34 @@ class ForumScreen extends ConsumerWidget {
 
           return Column(
             children: [
-              Container(
-                width: 300,
-                alignment: AlignmentDirectional.centerStart,
-                decoration: BoxDecoration(
-                  color: Palette.blu,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(30),
-                    bottomRight: Radius.circular(30)
-                  )
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 0,
+                  top: 0,
+                  right: 16,
+                  bottom: 0
                 ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16
-                ),
-                child: Text(forum.nombre,
-                  style: const TextStyle(
-                    color: Palette.whiteColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Palette.blu,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(30),
+                      bottomRight: Radius.circular(30)
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12
+                  ),
+                  child: IntrinsicWidth(
+                    child: Text(
+                      forum.nombre,
+                      style: const TextStyle(
+                        color: Palette.whiteColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700
+                      ),
+                    ),
                   ),
                 ),
               ),
